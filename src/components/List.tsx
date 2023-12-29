@@ -1,14 +1,9 @@
 import React from "react"
+import {User} from '../types'
 
 interface Props {
-    users: Array<{
-        nick: string,
-        level: number,
-        avatar: string,
-        description?: string
-    }>
+    users: Array<User>
 }
-
 
 const List: React.FC<Props> = ({ users }) => {
     return (

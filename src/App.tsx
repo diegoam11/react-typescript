@@ -2,17 +2,11 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import List from './components/List';
 import Form from './components/Form';
+import {User} from './types'
 
 interface AppState {
   users: Array<User>,
   usersPremium: number  // by now
-}
-
-interface User {
-  nick: string,
-  level: number,
-  avatar: string,
-  description?: string
 }
 
 const INITIAL_STATE = [
@@ -41,7 +35,7 @@ function App() {
     <div className="App">
       <h1>Users</h1>
       <List users={users}></List>
-      <Form></Form>
+      <Form onNewUser={setUsers}></Form>
     </div>
   );
 }

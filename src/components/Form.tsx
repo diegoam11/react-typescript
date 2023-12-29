@@ -1,14 +1,26 @@
-import { useState } from "react"
+import React, { useState } from "react"
+import {User} from '../types'
 
-const Form = () => {
-    const [inputValues, setInputValues] = useState({
+interface FormState{
+    inputValues: User
+}
+
+interface FormProps{
+    onNewUser: React.Dispatch<React.SetStateAction<User[]>>
+}
+
+const Form: React.FC<FormProps> = ({onNewUser}) => {
+    const [inputValues, setInputValues] = useState<FormState["inputValues"]>({
         nick: '',
         level: 0,
         avatar: '',
         description: ''
     });
 
-    const handleSubmit = () => {}
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        onNewUser(users => [...users, inputValues])
+    }
 
     const handleInputsValues = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setInputValues({
