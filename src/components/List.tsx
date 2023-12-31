@@ -5,6 +5,7 @@ interface Props {
     users: Array<User>
 }
 
+
 const List: React.FC<Props> = ({ users }) => {
     return (
         <ul>

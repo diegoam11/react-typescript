@@ -1,42 +1,44 @@
-import React, { useState } from "react"
-import {User} from '../types'
+import React from "react"
+import { User } from '../types'
+import useNewUserForm from "../hooks/useNewUserForm"
 
-interface FormState{
-    inputValues: User
+interface FormProps {
+    onNewUser: (newUser: User) => void
 }
 
-interface FormProps{
-    onNewUser: React.Dispatch<React.SetStateAction<User[]>>
-}
 
-const Form: React.FC<FormProps> = ({onNewUser}) => {
-    const [inputValues, setInputValues] = useState<FormState["inputValues"]>({
-        nick: '',
-        level: 0,
-        avatar: '',
-        description: ''
-    });
+const Form: React.FC<FormProps> = ({ onNewUser }) => {
+    const [inputValues, dispatch] = useNewUserForm()
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        onNewUser(users => [...users, inputValues])
+        onNewUser(inputValues)
+        dispatch({ type: "clear" })
     }
 
     const handleInputsValues = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setInputValues({
-            ...inputValues,
-            [e.target.name]: e.target.value
+        const {name, value} = e.target
+        dispatch({
+            type: "changeValues",
+            payload: {
+                inputName: name, inputValue: value
+            }
         })
     }
 
-    return(
+    const handleClear = () => {
+        dispatch({ type: "clear" })
+    }
+
+    return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input onChange={handleInputsValues} type="text" name="nick" placeholder="nick"/>
-                <input onChange={handleInputsValues} type="number" name="level" placeholder="level"/>
-                <input onChange={handleInputsValues} type="text" name="avatar" placeholder="link avatar"/>
-                <textarea onChange={handleInputsValues} name="description" placeholder="description"/>
-                <button>Save</button>
+                <input onChange={handleInputsValues} value={inputValues.nick} type="text" name="nick" placeholder="nick" />
+                <input onChange={handleInputsValues} value={inputValues.level} type="number" name="level" placeholder="level" />
+                <input onChange={handleInputsValues} value={inputValues.avatar} type="text" name="avatar" placeholder="link avatar" />
+                <textarea onChange={handleInputsValues} value={inputValues.description} name="description" placeholder="description" />
+                <button onClick={handleClear} type="button">Clear Form</button>
+                <button type="submit">Save</button>
             </form>
         </div>
     )
